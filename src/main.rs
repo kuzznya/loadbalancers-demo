@@ -7,9 +7,10 @@ mod lb;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let mut balancer = lb::RoundRobin::new();
-    balancer.register_server("google.com:80".to_string());
-    balancer.register_server("amazon.com:80".to_string());
+    // let mut balancer = lb::RoundRobin::new();
+    let mut balancer = lb::LeastConnections::new();
+    balancer.register_server("google.com:80".to_string()).await;
+    balancer.register_server("amazon.com:80".to_string()).await;
 
     let listener = TcpListener::bind("127.0.0.1:8080").await?;
 
